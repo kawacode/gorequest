@@ -38,7 +38,9 @@ func main() {
 	bot.HttpRequest.Request.URL = "https://tls.peet.ws/api/all" // URL
 	bot.HttpRequest.Request.Method = "GET"                      // All method that are supported by fhttp is here supported too
 	bot.HttpRequest.Request.Protocol = "2"                      // 2.0 and 1.1 supported
-	bot.HttpRequest.Request.ReadResponse = true                 // readresponse is by default false
+	bot.HttpRequest.Request.ReadResponseBody = true                                  // Used to read the body from the server.
+	bot.HttpRequest.Request.ReadResponseCookies = true                                  // Used to read the cookies from the server.
+	bot.HttpRequest.Request.ReadResponseHeaders = true                                  // Used to read the headers from the server.
 	gorequest.HttpRequest(&bot)                                  // Request
 	println(bot.HttpRequest.Response.Source)                    // Print response source code of the request
 }
@@ -58,7 +60,9 @@ func main() {
 	bot.HttpRequest.Request.URL = "https://tls.peet.ws/api/all" // Setting the URL of the request.
 	bot.HttpRequest.Request.Method = "GET"                      // Used to set the method of the request.
 	bot.HttpRequest.Request.Protocol = "2"                      // Used to set the protocol version of the request.
-	bot.HttpRequest.Request.ReadResponse = true                 // Used to read the response from the server.
+	bot.HttpRequest.Request.ReadResponseBody = true                                  // Used to read the body from the server.
+	bot.HttpRequest.Request.ReadResponseCookies = true                                  // Used to read the cookies from the server.
+	bot.HttpRequest.Request.ReadResponseHeaders = true                                  // Used to read the headers from the server.
 	bot.HttpRequest.Request.Headers = map[string]string{        // Used to add headers to the request.
 		"Content-Type": "application/json",
 		"TestToken":    "123492190391239102301293",
