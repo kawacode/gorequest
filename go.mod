@@ -6,11 +6,10 @@ require (
 	github.com/kawacode/fhttp v0.4.5
 	github.com/kawacode/goproxy v1.0.4
 	github.com/kawacode/gostruct v1.0.3
-	github.com/kawacode/utls v1.1.4
+	github.com/kawacode/utls v1.1.6
 )
 
 require (
-	github.com/bogdanfinn/utls v1.1.0 // indirect
 	github.com/gofiber/fiber/v2 v2.37.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.39.0 // indirect

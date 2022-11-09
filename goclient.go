@@ -2,6 +2,7 @@ package gorequest
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
 	"net"
 	"strconv"
@@ -75,9 +76,26 @@ func CreateHttp1Client(bot *gostruct.BotData) (*http.Client, error) {
 					if bot.HttpRequest.Request.Protocol != "2" && bot.HttpRequest.Request.Protocol != "1" {
 						bot.HttpRequest.Request.Protocol = "2"
 					}
-					tlsspec, err := gotools.ParseJA3(bot.HttpRequest.Request.Ja3, bot.HttpRequest.Request.Protocol)
-					if err != nil {
-						return nil, err
+					var tlsspec *tls.ClientHelloSpec
+					if bot.HttpRequest.Request.Ja3 == "-" {
+						var err error
+						tlsspec, err = gotools.ParseJA3(bot.HttpRequest.Request.Ja3, bot.HttpRequest.Request.Protocol)
+						if err != nil {
+							return nil, err
+						}
+					} else {
+						data, err := hex.DecodeString(bot.HttpRequest.Request.Ja3)
+						if err != nil {
+							return nil, err
+						}
+						fingerprinter := &tls.Fingerprinter{}
+						generatedSpec, err := fingerprinter.FingerprintClientHello(data)
+						if err != nil {
+							return nil, err
+						}
+						if err := uconn.ApplyPreset(generatedSpec); err != nil {
+							return nil, err
+						}
 					}
 					if err := uconn.ApplyPreset(tlsspec); err != nil {
 						return nil, err
@@ -171,9 +189,26 @@ func CreateHttp2Client(bot *gostruct.BotData) (*http.Client, error) {
 					if bot.HttpRequest.Request.Protocol != "2" && bot.HttpRequest.Request.Protocol != "1" {
 						bot.HttpRequest.Request.Protocol = "2"
 					}
-					tlsspec, err := gotools.ParseJA3(bot.HttpRequest.Request.Ja3, bot.HttpRequest.Request.Protocol)
-					if err != nil {
-						return nil, err
+					var tlsspec *tls.ClientHelloSpec
+					if strings.Contains(bot.HttpRequest.Request.Ja3, "-") {
+						var err error
+						tlsspec, err = gotools.ParseJA3(bot.HttpRequest.Request.Ja3, bot.HttpRequest.Request.Protocol)
+						if err != nil {
+							return nil, err
+						}
+					} else {
+						data, err := hex.DecodeString(bot.HttpRequest.Request.Ja3)
+						if err != nil {
+							return nil, err
+						}
+						fingerprinter := &tls.Fingerprinter{AllowBluntMimicry: true, KeepPSK: true}
+						generatedSpec, err := fingerprinter.FingerprintClientHello(data)
+						if err != nil {
+							return nil, err
+						}
+						if err := uconn.ApplyPreset(generatedSpec); err != nil {
+							return nil, err
+						}
 					}
 					if err := uconn.ApplyPreset(tlsspec); err != nil {
 						return nil, err
@@ -188,12 +223,11 @@ func CreateHttp2Client(bot *gostruct.BotData) (*http.Client, error) {
 			return uconn, nil
 		},
 	}
-	Settings, SettingsOrder, Priorities, windowupdate := gotools.GetFrameSettingsStringList(bot)
-	http2transport.SettingsOrder = SettingsOrder
-	http2transport.Settings = Settings
-	http2transport.Priorities = Priorities
-	http2transport.ConnectionFlow = uint32(windowupdate)
-	http2transport.PushHandler = &http2.DefaultPushHandler{}
+	gotools.GetHttp2SettingsfromClient(bot)
+	http2transport.SettingsOrder = bot.HttpRequest.Request.HTTP2TRANSPORT.ClientProfile.SettingsOrder
+	http2transport.Settings = bot.HttpRequest.Request.HTTP2TRANSPORT.ClientProfile.Settings
+	http2transport.Priorities = bot.HttpRequest.Request.HTTP2TRANSPORT.ClientProfile.Priorities
+	http2transport.ConnectionFlow = uint32(bot.HttpRequest.Request.HTTP2TRANSPORT.ClientProfile.ConnectionFlow)
 	timeout := gotools.IsInt(bot.HttpRequest.Request.Timeout)
 	var client *http.Client
 	if timeout {
