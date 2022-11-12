@@ -6,7 +6,7 @@ require (
 	github.com/kawacode/fhttp v0.4.5
 	github.com/kawacode/goproxy v1.0.4
 	github.com/kawacode/gostruct v1.0.4
-	github.com/kawacode/utls v1.1.6
+	github.com/kawacode/utls v1.1.7
 )
 
 require (
