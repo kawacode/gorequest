@@ -43,69 +43,82 @@ func CreateHttp1Client(bot *gostruct.BotData) (*http.Client, error) {
 		DisableKeepAlives:  true,
 		DialTLSContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
 			tls.EnableWeakCiphers()
-			var conn net.Conn
-			if len(bot.HttpRequest.Request.Proxy) > 0 {
-				dialer, err := goproxy.CreateProxyDialer(bot.HttpRequest.Request.Proxy)
-				if err != nil {
-					return nil, err
-				}
-				con, err := dialer.Dial(network, addr)
-				if err != nil {
-					return nil, err
-				}
-				conn = con
-			} else {
-				var err error
-				conn, err = net.Dial(network, addr)
-				if err != nil {
-					return nil, err
-				}
-			}
-			host, _, err := net.SplitHostPort(addr)
+			// var conn net.Conn
+			// if len(bot.HttpRequest.Request.Proxy) > 0 {
+			// 	dialer, err := goproxy.CreateProxyDialer(bot.HttpRequest.Request.Proxy)
+			// 	if err != nil {
+			// 		return nil, err
+			// 	}
+			// 	con, err := dialer.Dial(network, addr)
+			// 	if err != nil {
+			// 		return nil, err
+			// 	}
+			// 	conn = con
+			// } else {
+			// 	var err error
+			// 	conn, err = net.Dial(network, addr)
+			// 	if err != nil {
+			// 		return nil, err
+			// 	}
+			// }
+			// host, _, err := net.SplitHostPort(addr)
+			// if err != nil {
+			// 	return nil, err
+			// }
+			// config := &tls.Config{ServerName: host, InsecureSkipVerify: bot.HttpRequest.Request.InsecureSkipVerify}
+			// var uconn *tls.UConn
+			// if bot.HttpRequest.Request.HelloClient.Str() != "-" {
+			// 	uconn = tls.UClient(conn, config, bot.HttpRequest.Request.HelloClient)
+			// 	if strings.Contains(bot.HttpRequest.Request.HelloClient.Str(), "CustomInternal") {
+			// 		if bot.HttpRequest.Request.Ja3 == "" {
+			// 			return nil, errors.New("missing clientspec/Ja3")
+			// 		}
+			// 		if bot.HttpRequest.Request.Protocol != "2" && bot.HttpRequest.Request.Protocol != "1" {
+			// 			bot.HttpRequest.Request.Protocol = "2"
+			// 		}
+			// 		var tlsspec *tls.ClientHelloSpec
+			// 		if bot.HttpRequest.Request.Ja3 == "-" {
+			// 			var err error
+			// 			tlsspec, err = gotools.ParseJA3(bot.HttpRequest.Request.Ja3, bot.HttpRequest.Request.Protocol)
+			// 			if err != nil {
+			// 				return nil, err
+			// 			}
+			// 		} else {
+			// 			data, err := hex.DecodeString(bot.HttpRequest.Request.Ja3)
+			// 			if err != nil {
+			// 				return nil, err
+			// 			}
+			// 			fingerprinter := &tls.Fingerprinter{}
+			// 			generatedSpec, err := fingerprinter.FingerprintClientHello(data)
+			// 			if err != nil {
+			// 				return nil, err
+			// 			}
+			// 			if err := uconn.ApplyPreset(generatedSpec); err != nil {
+			// 				return nil, err
+			// 			}
+			// 		}
+			// 		if err := uconn.ApplyPreset(tlsspec); err != nil {
+			// 			return nil, err
+			// 		}
+			// 		if err := uconn.Handshake(); err != nil {
+			// 			return nil, err
+			// 		}
+			// 	}
+			// } else {
+			// 	uconn = tls.UClient(conn, config, tls.HelloChrome_Auto)
+			// }
+			uconn := tls.UClient(&net.TCPConn{}, nil, tls.HelloCustom)
+			data, err := hex.DecodeString(bot.HttpRequest.Request.ClientSpec)
 			if err != nil {
 				return nil, err
 			}
-			config := &tls.Config{ServerName: host, InsecureSkipVerify: bot.HttpRequest.Request.InsecureSkipVerify}
-			var uconn *tls.UConn
-			if bot.HttpRequest.Request.HelloClient.Str() != "-" {
-				uconn = tls.UClient(conn, config, bot.HttpRequest.Request.HelloClient)
-				if strings.Contains(bot.HttpRequest.Request.HelloClient.Str(), "CustomInternal") {
-					if bot.HttpRequest.Request.Ja3 == "" {
-						return nil, errors.New("missing clientspec/Ja3")
-					}
-					if bot.HttpRequest.Request.Protocol != "2" && bot.HttpRequest.Request.Protocol != "1" {
-						bot.HttpRequest.Request.Protocol = "2"
-					}
-					var tlsspec *tls.ClientHelloSpec
-					if bot.HttpRequest.Request.Ja3 == "-" {
-						var err error
-						tlsspec, err = gotools.ParseJA3(bot.HttpRequest.Request.Ja3, bot.HttpRequest.Request.Protocol)
-						if err != nil {
-							return nil, err
-						}
-					} else {
-						data, err := hex.DecodeString(bot.HttpRequest.Request.Ja3)
-						if err != nil {
-							return nil, err
-						}
-						fingerprinter := &tls.Fingerprinter{}
-						generatedSpec, err := fingerprinter.FingerprintClientHello(data)
-						if err != nil {
-							return nil, err
-						}
-						if err := uconn.ApplyPreset(generatedSpec); err != nil {
-							return nil, err
-						}
-					}
-					if err := uconn.ApplyPreset(tlsspec); err != nil {
-						return nil, err
-					}
-					if err := uconn.Handshake(); err != nil {
-						return nil, err
-					}
-				}
-			} else {
-				uconn = tls.UClient(conn, config, tls.HelloChrome_Auto)
+			fingerprinter := &tls.Fingerprinter{}
+			generatedSpec, err := fingerprinter.FingerprintClientHello(data)
+			if err != nil {
+				return nil, err
+			}
+			if err := uconn.ApplyPreset(generatedSpec); err != nil {
+				return nil, err
 			}
 			return uconn, nil
 		},
@@ -180,24 +193,24 @@ func CreateHttp2Client(bot *gostruct.BotData) (*http.Client, error) {
 			}
 			config := &tls.Config{ServerName: host, InsecureSkipVerify: bot.HttpRequest.Request.InsecureSkipVerify}
 			var uconn *tls.UConn
-			if bot.HttpRequest.Request.HelloClient.Str() != "-" {
-				uconn = tls.UClient(conn, config, bot.HttpRequest.Request.HelloClient)
-				if strings.Contains(bot.HttpRequest.Request.HelloClient.Str(), "CustomInternal") {
-					if bot.HttpRequest.Request.Ja3 == "" {
+			if bot.HttpRequest.Request.Client.Str() != "-" {
+				uconn = tls.UClient(conn, config, bot.HttpRequest.Request.Client)
+				if strings.Contains(bot.HttpRequest.Request.Client.Str(), "CustomInternal") {
+					if bot.HttpRequest.Request.ClientSpec == "" {
 						return nil, errors.New("missing clientspec/Ja3")
 					}
 					if bot.HttpRequest.Request.Protocol != "2" && bot.HttpRequest.Request.Protocol != "1" {
 						bot.HttpRequest.Request.Protocol = "2"
 					}
 					var tlsspec *tls.ClientHelloSpec
-					if strings.Contains(bot.HttpRequest.Request.Ja3, "-") {
+					if strings.Contains(bot.HttpRequest.Request.ClientSpec, "-") {
 						var err error
-						tlsspec, err = gotools.ParseJA3(bot.HttpRequest.Request.Ja3, bot.HttpRequest.Request.Protocol)
+						tlsspec, err = gotools.ParseJA3(bot.HttpRequest.Request.ClientSpec, bot.HttpRequest.Request.Protocol)
 						if err != nil {
 							return nil, err
 						}
 					} else {
-						data, err := hex.DecodeString(bot.HttpRequest.Request.Ja3)
+						data, err := hex.DecodeString(bot.HttpRequest.Request.ClientSpec)
 						if err != nil {
 							return nil, err
 						}
