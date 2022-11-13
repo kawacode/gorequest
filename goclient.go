@@ -68,7 +68,7 @@ func CreateHttp1Client(bot *gostruct.BotData) (*http.Client, error) {
 			config := &tls.Config{ServerName: host, InsecureSkipVerify: bot.HttpRequest.Request.InsecureSkipVerify}
 			var uconn *tls.UConn
 			if bot.HttpRequest.Request.Client.Str() != "-" {
-				uconn = tls.UClient(conn, &tls.Config{ServerName: host}, tls.HelloCustom)
+				uconn = tls.UClient(conn, &tls.Config{ServerName: host}, bot.HttpRequest.Request.Client)
 				if strings.Contains(bot.HttpRequest.Request.Client.Str(), "CustomInternal") {
 					if bot.HttpRequest.Request.ClientSpec == "" {
 						return nil, errors.New("missing clientspec/Ja3")
@@ -180,7 +180,7 @@ func CreateHttp2Client(bot *gostruct.BotData) (*http.Client, error) {
 			config := &tls.Config{ServerName: host, InsecureSkipVerify: bot.HttpRequest.Request.InsecureSkipVerify}
 			var uconn *tls.UConn
 			if bot.HttpRequest.Request.Client.Str() != "-" {
-				uconn = tls.UClient(conn, &tls.Config{ServerName: host}, tls.HelloCustom)
+				uconn = tls.UClient(conn, &tls.Config{ServerName: host}, bot.HttpRequest.Request.Client)
 				if strings.Contains(bot.HttpRequest.Request.Client.Str(), "CustomInternal") {
 					if bot.HttpRequest.Request.ClientSpec == "" {
 						return nil, errors.New("missing clientspec/Ja3")

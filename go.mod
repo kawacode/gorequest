@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/kawacode/fhttp v0.4.5
 	github.com/kawacode/goproxy v1.0.4
-	github.com/kawacode/gostruct v1.0.4
+	github.com/kawacode/gostruct v1.0.5
 	github.com/kawacode/utls v1.1.7
 )
 
@@ -18,7 +18,7 @@ require (
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
-	github.com/kawacode/gotools v1.0.9
+	github.com/kawacode/gotools v1.0.11
 	github.com/klauspost/compress v1.15.0 // indirect
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
 	golang.org/x/net v0.0.0-20220420153159-1850ba15e1be // indirect
