@@ -21,6 +21,7 @@ This Project is made for spoofing Ja3 and Akamai fingerprint, it is also very si
 ```
 go get github.com/kawacode/gorequest
 go get github.com/kawacode/gostruct
+go get github.com/kawacode/gotools
 ```
 # 🪧 How to use it?
 ### HTTP request using gorequest without proxy or Ja3 customization
