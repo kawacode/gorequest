@@ -68,7 +68,7 @@ func CreateHttp1Client(bot *gostruct.BotData) (*http.Client, error) {
 			config := &tls.Config{ServerName: host, InsecureSkipVerify: bot.HttpRequest.Request.InsecureSkipVerify}
 			var uconn *tls.UConn
 			if bot.HttpRequest.Request.Client.Str() != "-" {
-				uconn = tls.UClient(conn, &tls.Config{ServerName: host}, bot.HttpRequest.Request.Client)
+				uconn = tls.UClient(conn, config, bot.HttpRequest.Request.Client)
 				if strings.Contains(bot.HttpRequest.Request.Client.Str(), "CustomInternal") {
 					if bot.HttpRequest.Request.ClientSpec == "" {
 						return nil, errors.New("missing clientspec/Ja3")
@@ -77,7 +77,7 @@ func CreateHttp1Client(bot *gostruct.BotData) (*http.Client, error) {
 						bot.HttpRequest.Request.Protocol = "1"
 					}
 					var tlsspec *tls.ClientHelloSpec
-					if bot.HttpRequest.Request.ClientSpec == "-" {
+					if strings.Contains(bot.HttpRequest.Request.ClientSpec, "-") {
 						var err error
 						tlsspec, err = gotools.ParseJA3(bot.HttpRequest.Request.ClientSpec, bot.HttpRequest.Request.Protocol)
 						if err != nil {
@@ -180,7 +180,7 @@ func CreateHttp2Client(bot *gostruct.BotData) (*http.Client, error) {
 			config := &tls.Config{ServerName: host, InsecureSkipVerify: bot.HttpRequest.Request.InsecureSkipVerify}
 			var uconn *tls.UConn
 			if bot.HttpRequest.Request.Client.Str() != "-" {
-				uconn = tls.UClient(conn, &tls.Config{ServerName: host}, bot.HttpRequest.Request.Client)
+				uconn = tls.UClient(conn, config, bot.HttpRequest.Request.Client)
 				if strings.Contains(bot.HttpRequest.Request.Client.Str(), "CustomInternal") {
 					if bot.HttpRequest.Request.ClientSpec == "" {
 						return nil, errors.New("missing clientspec/Ja3")
@@ -189,7 +189,7 @@ func CreateHttp2Client(bot *gostruct.BotData) (*http.Client, error) {
 						bot.HttpRequest.Request.Protocol = "2"
 					}
 					var tlsspec *tls.ClientHelloSpec
-					if bot.HttpRequest.Request.ClientSpec == "-" {
+					if strings.Contains(bot.HttpRequest.Request.ClientSpec, "-") {
 						var err error
 						tlsspec, err = gotools.ParseJA3(bot.HttpRequest.Request.ClientSpec, bot.HttpRequest.Request.Protocol)
 						if err != nil {

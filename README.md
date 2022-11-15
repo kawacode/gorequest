@@ -1,8 +1,8 @@
 # Gorequest
+
 This Project is made for spoofing Ja3 and Akamai fingerprint, it is also very simple to use. I made it noob-friendly as possiable.
 
 # 🚀 Features
-
 
 ```markdown
 - High-performance
@@ -17,13 +17,19 @@ This Project is made for spoofing Ja3 and Akamai fingerprint, it is also very si
 - HTTP2 Setting customization
 - HTTP1 Setting customization
 ```
+
 # ⬇️ How to install it?
+
 ```
 go get github.com/kawacode/gorequest
 go get github.com/kawacode/gostruct
+go get github.com/kawacode/gotools
 ```
+
 # 🪧 How to use it?
+
 ### HTTP request using gorequest without proxy or Ja3 customization
+
 ```go
 package main
 
@@ -42,11 +48,19 @@ func main() {
 	bot.HttpRequest.Request.ReadResponseCookies = true                                  // Used to read the cookies from the server.
 	bot.HttpRequest.Request.ReadResponseHeaders = true                                  // Used to read the headers from the server.
 	gorequest.HttpRequest(&bot)                                  // Request
-	println(bot.HttpRequest.Response.Source)                    // Print response source code of the request
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.request
 }
 
 ```
+
 ### HTTP request using gorequest with custom and ordered headers
+
 ```go
 package main
 
@@ -72,11 +86,24 @@ func main() {
 		"user-agent":   "Go-http-client/2.0",
 	}
 	gorequest.HttpRequest(&bot)               // A function that is used to send a request to the server.
-	println(bot.HttpRequest.Response.Source) // Printing the response from the server.
-}
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.
 
 ```
+
 ### HTTP request using gorequest in debugging mode
+
 ```go
 package main
 
@@ -109,11 +136,19 @@ func main() {
 		"testtoken",
 	}
 	gorequest.HttpRequest(&bot)               // A function that is used to send a request to the server.
-	println(bot.HttpRequest.Response.Source) // Printing the response from the server.
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.
 }
 
 ```
+
 ### HTTP Request using gorequest with proxy
+
 ```go
 package main
 
@@ -131,11 +166,19 @@ func main() {
 	bot.HttpRequest.Request.Proxy = "type://127.0.0.1:1080:user:password" // Setting the proxy of the request. Supported types: ( "proxyless","http", "https", "socks4", "socks4a", "socks5" ), Without Auth format: type://example.com:port
 	bot.HttpRequest.Request.UseProxy = true                               // Used to tell the program to use the proxy.
 	gorequest.HttpRequest(&bot)                                          // A function that is used to send a request to the server.
-	println(bot.HttpRequest.Response.Source)                            // Printing the response from the server.
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.
 }
 
 ```
+
 ### HTTP Request using gorequest with custom Ja3
+
 ```go
 package main
 
@@ -154,11 +197,19 @@ func main() {
 	bot.HttpRequest.Request.ClientSpec = "<YourFingerprintbyteOrJa3>" // Your Fingerprint byte or Ja3 it is recommended to use Fingerprint byte
 	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloCustom") // The Client
 	gorequest.HttpRequest(&bot)                                                      // A function that is used to send a request to the server.
-	println(bot.HttpRequest.Response.Source)                                         // Printing the response from the server.
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.
 }
 
 ```
+
 ### HTTP Request using gorequest with HelloClient
+
 ```go
 package main
 
@@ -176,11 +227,19 @@ func main() {
 	bot.HttpRequest.Request.ReadResponse = true                                      // Used to read the response from the server.
 	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloChrome_Auto") // The Client
 	gorequest.HttpRequest(&bot)                                                      // A function that is used to send a request to the server.
-	println(bot.HttpRequest.Response.Source)                                         // Printing the response from the server.
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.
 }
 
 ```
+
 ### HTTP Request using gorequest with MaxRedirects or disable redirects
+
 ```go
 package main
 
@@ -197,11 +256,19 @@ func main() {
 	bot.HttpRequest.Request.ReadResponse = true                 // Used to read the response from the server.
 	bot.HttpRequest.Request.MaxRedirects = "10"                 // Used to set the max number of redirects allowed from server. By default 10 redirects. to disable use "false"
 	gorequest.HttpRequest(&bot)                                  // A function that is used to send a request to the server.
-	println(bot.HttpRequest.Response.Source)                    // Printing the response from the server.
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.
 }
 
 ```
+
 ### HTTP Request using gorequest with Payload
+
 ```go
 package main
 
@@ -218,10 +285,18 @@ func main() {
 	bot.HttpRequest.Request.ReadResponse = true                 // Used to read the response from the server.
 	bot.HttpRequest.Request.Payload = "user=joe&pass=ok"        // Setting the payload of the request.
 	gorequest.HttpRequest(&bot)                                  // A function that is used to send a request to the server.
-	println(bot.HttpRequest.Response.Source)                    // Printing the response from the server.
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.
 }
 ```
+
 ### HTTP Request using gorequest with Frame and Priority ordering and customization
+
 ```go
 package main
 
@@ -239,10 +314,18 @@ func main() {
 	bot.HttpRequest.Request.ReadResponse = true                 // Used to read the response from the server.
 	gorequest.HttpRequest(&bot)                                  // A function that is used to send a request to the server.
 	bot.HttpRequest.Request.Payload = "user=joe&pass=ok"        // Setting the payload of the request.
-	println(bot.HttpRequest.Response.Source)                    // Printing the response from the server.
+	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
+		println(k, ":	", v)
+	}
+	for k, v := range bot.HttpRequest.Request.Cookies { // Printing the Cookies from the server.
+		println(k, ":	", v)
+	}
+	println(bot.HttpRequest.Response.Source) // Printing the source from the server.
 }
 ```
-### Supported HelloClient's: 
+
+### Supported HelloClient's:
+
 ```go
 HelloCustom
 HelloChrome_58
@@ -293,10 +376,12 @@ HelloRandomizedALPN
 HelloRandomizedNoALPN
 
 ```
+
 ## LICENSE
+
 ### GPL3 LICENSE SYNOPSIS
 
-**_TL;DR_*** Here's what the GPL3 license entails:
+**_TL;DR_\*** Here's what the GPL3 license entails:
 
 ```markdown
 1. Anyone can copy, modify and distribute this software.
