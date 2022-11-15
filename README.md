@@ -52,6 +52,7 @@ package main
 
 import (
   gorequest "github.com/kawacode/gorequest"
+  gotools "github.com/kawacode/gotools"
   gostruct "github.com/kawacode/gostruct"
 )
 
@@ -63,21 +64,12 @@ func main() {
 	bot.HttpRequest.Request.ReadResponseBody = true                                  // Used to read the body from the server.
 	bot.HttpRequest.Request.ReadResponseCookies = true                                  // Used to read the cookies from the server.
 	bot.HttpRequest.Request.ReadResponseHeaders = true                                  // Used to read the headers from the server.
+	bot.HttpRequest.Request.ClientSpec = "<YourFingerprintbyteOrJa3>" // Your Fingerprint byte or Ja3 it is recommended to use Fingerprint byte
+	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloCustom") // The Client
 	bot.HttpRequest.Request.Headers = map[string]string{        // Used to add headers to the request.
 		"Content-Type": "application/json",
 		"TestToken":    "123492190391239102301293",
 		"user-agent":   "Go-http-client/2.0",
-	}
-	bot.HttpRequest.Request.HeaderOrderKey = []string{ // Used to order the headers in the request.
-		"content-type",
-		"user-agent",
-		"testtoken",
-	}
-	bot.HttpRequest.Request.PHeaderOrderKey = []string{ // Used to order the Pseudo headers in the request.
-		":authority",
-		":path",
-		":scheme",
-		":method",
 	}
 	gorequest.HttpRequest(&bot)               // A function that is used to send a request to the server.
 	println(bot.HttpRequest.Response.Source) // Printing the response from the server.
@@ -91,6 +83,8 @@ package main
 import (
   gorequest "github.com/kawacode/gorequest"
   gostruct "github.com/kawacode/gostruct"
+  gotools "github.com/kawacode/gotools"
+
 )
 
 func main() {
@@ -101,6 +95,8 @@ func main() {
 	bot.HttpRequest.Request.ReadResponseBody = true                                  // Used to read the body from the server.
 	bot.HttpRequest.Request.ReadResponseCookies = true                                  // Used to read the cookies from the server.
 	bot.HttpRequest.Request.ReadResponseHeaders = true                                  // Used to read the headers from the server.
+	bot.HttpRequest.Request.ClientSpec = "<YourFingerprintbyteOrJa3>" // Your Fingerprint byte or Ja3 it is recommended to use Fingerprint byte
+	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloCustom") // The Client
 	bot.HttpRequest.Request.InsecureSkipVerify = true // Turn on debugging mode.
 	bot.HttpRequest.Request.Headers = map[string]string{        // Used to add headers to the request.
 		"Content-Type": "application/json",
@@ -111,12 +107,6 @@ func main() {
 		"content-type",
 		"user-agent",
 		"testtoken",
-	}
-	bot.HttpRequest.Request.PHeaderOrderKey = []string{ // Used to order the Pseudo headers in the request.
-		":authority",
-		":path",
-		":scheme",
-		":method",
 	}
 	gorequest.HttpRequest(&bot)               // A function that is used to send a request to the server.
 	println(bot.HttpRequest.Response.Source) // Printing the response from the server.
@@ -152,6 +142,7 @@ package main
 import (
 	gorequest "github.com/kawacode/gorequest"
   gostruct "github.com/kawacode/gostruct"
+  gotools "github.com/kawacode/gotools"
 )
 
 func main() {
@@ -160,8 +151,8 @@ func main() {
 	bot.HttpRequest.Request.Method = "GET"                                           // Used to set the method of the request.
 	bot.HttpRequest.Request.Protocol = "2"                                           // Used to set the protocol version of the request.
 	bot.HttpRequest.Request.ReadResponse = true                                      // Used to read the response from the server.
-	bot.HttpRequest.Request.HelloClient = *gotools.GetHelloClient("HelloCustom")     // Setting the JA3 fingerprint of the request.
-	bot.HttpRequest.Request.Ja3 = "<Your_Ja3>"                                       // Setting the JA3 fingerprint of the request.
+	bot.HttpRequest.Request.ClientSpec = "<YourFingerprintbyteOrJa3>" // Your Fingerprint byte or Ja3 it is recommended to use Fingerprint byte
+	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloCustom") // The Client
 	gorequest.HttpRequest(&bot)                                                      // A function that is used to send a request to the server.
 	println(bot.HttpRequest.Response.Source)                                         // Printing the response from the server.
 }
@@ -174,6 +165,7 @@ package main
 import (
 	gorequest "github.com/kawacode/gorequest"
   gostruct "github.com/kawacode/gostruct"
+  gotools "github.com/kawacode/gotools"
 )
 
 func main() {
@@ -182,7 +174,7 @@ func main() {
 	bot.HttpRequest.Request.Method = "GET"                                           // Used to set the method of the request.
 	bot.HttpRequest.Request.Protocol = "2"                                           // Used to set the protocol version of the request.
 	bot.HttpRequest.Request.ReadResponse = true                                      // Used to read the response from the server.
-	bot.HttpRequest.Request.HelloClient = *gotools.GetHelloClient("HelloChrome_105")     // Setting the JA3 fingerprint of the request. Check below for supported HelloClients
+	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloChrome_Auto") // The Client
 	gorequest.HttpRequest(&bot)                                                      // A function that is used to send a request to the server.
 	println(bot.HttpRequest.Response.Source)                                         // Printing the response from the server.
 }
@@ -246,10 +238,6 @@ func main() {
 	bot.HttpRequest.Request.Protocol = "2"                      // Used to set the protocol version of the request.
 	bot.HttpRequest.Request.ReadResponse = true                 // Used to read the response from the server.
 	gorequest.HttpRequest(&bot)                                  // A function that is used to send a request to the server.
-	err := json.Unmarshal([]byte(`{"windowupdate: 15663105, "frames": [{"header_table_size":65536},{"max_concurrent_streams":1000},{"initial_window_size":6291456},{"max_header_list_size":262144}], "priorities":[]}`), &bot.HttpRequest.Request.HTTP2TRANSPORT.Settings) // setting the priority, frames and the connectionflow.
-	if err != nil {
-	          json.Unmarshal([]byte(`{}`), &bot.HttpRequest.Request.HTTP2TRANSPORT.Settings)
-	}
 	bot.HttpRequest.Request.Payload = "user=joe&pass=ok"        // Setting the payload of the request.
 	println(bot.HttpRequest.Response.Source)                    // Printing the response from the server.
 }
@@ -268,6 +256,8 @@ HelloChrome_100
 HelloChrome_103
 HelloChrome_104
 HelloChrome_105
+HelloChrome_106
+HelloChrome_107
 HelloChrome_Auto
 HelloFirefox_55
 HelloFirefox_56
@@ -275,6 +265,8 @@ HelloFirefox_63
 HelloFirefox_65
 HelloFirefox_102
 HelloFirefox_104
+HelloFirefox_105
+HelloFirefox_106
 HelloFirefox_Auto
 HelloAndroid_11_OkHttp
 HelloIOS_11_1
@@ -283,11 +275,16 @@ HelloIOS_13
 HelloIOS_14
 HelloIOS_15_5
 HelloIOS_15_6
+HelloIOS_16_0
 HelloIOS_Auto
 HelloSafari_15_3
 HelloSafari_15_5
+HelloSafari_16_0
+HelloSafari_15_6_1
 HelloSafari_Auto
-HelloGolang
+HelloIPad_15_6
+HelloIPad_Auto
+Hellocsslang
 HelloOpera_89
 HelloOpera_90
 HelloOpera_Auto
