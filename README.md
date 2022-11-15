@@ -84,6 +84,45 @@ func main() {
 }
 
 ```
+### HTTP request using gorequest in debugging mode
+```go
+package main
+
+import (
+  gorequest "github.com/kawacode/gorequest"
+  gostruct "github.com/kawacode/gostruct"
+)
+
+func main() {
+	var bot gostruct.BotData                                    // Creating a variable called `bot` and setting it to the type `gorequest.BotData`.
+	bot.HttpRequest.Request.URL = "https://tls.peet.ws/api/all" // Setting the URL of the request.
+	bot.HttpRequest.Request.Method = "GET"                      // Used to set the method of the request.
+	bot.HttpRequest.Request.Protocol = "2"                      // Used to set the protocol version of the request.
+	bot.HttpRequest.Request.ReadResponseBody = true                                  // Used to read the body from the server.
+	bot.HttpRequest.Request.ReadResponseCookies = true                                  // Used to read the cookies from the server.
+	bot.HttpRequest.Request.ReadResponseHeaders = true                                  // Used to read the headers from the server.
+	bot.HttpRequest.Request.InsecureSkipVerify = true // Turn on debugging mode.
+	bot.HttpRequest.Request.Headers = map[string]string{        // Used to add headers to the request.
+		"Content-Type": "application/json",
+		"TestToken":    "123492190391239102301293",
+		"user-agent":   "Go-http-client/2.0",
+	}
+	bot.HttpRequest.Request.HeaderOrderKey = []string{ // Used to order the headers in the request.
+		"content-type",
+		"user-agent",
+		"testtoken",
+	}
+	bot.HttpRequest.Request.PHeaderOrderKey = []string{ // Used to order the Pseudo headers in the request.
+		":authority",
+		":path",
+		":scheme",
+		":method",
+	}
+	gorequest.HttpRequest(&bot)               // A function that is used to send a request to the server.
+	println(bot.HttpRequest.Response.Source) // Printing the response from the server.
+}
+
+```
 ### HTTP Request using gorequest with proxy
 ```go
 package main
