@@ -79,7 +79,7 @@ func main() {
 	bot.HttpRequest.Request.ReadResponseCookies = true                                  // Used to read the cookies from the server.
 	bot.HttpRequest.Request.ReadResponseHeaders = true                                  // Used to read the headers from the server.
 	bot.HttpRequest.Request.ClientSpec = "<YourFingerprintbyteOrJa3>" // Your Fingerprint byte or Ja3 it is recommended to use Fingerprint byte
-	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloCustom") // The Client
+	bot.HttpRequest.Request.Client = *gotools.GetHelloClient("HelloCustom") // The Client
 	bot.HttpRequest.Request.Headers = map[string]string{        // Used to add headers to the request.
 		"Content-Type": "application/json",
 		"TestToken":    "123492190391239102301293",
@@ -123,7 +123,7 @@ func main() {
 	bot.HttpRequest.Request.ReadResponseCookies = true                                  // Used to read the cookies from the server.
 	bot.HttpRequest.Request.ReadResponseHeaders = true                                  // Used to read the headers from the server.
 	bot.HttpRequest.Request.ClientSpec = "<YourFingerprintbyteOrJa3>" // Your Fingerprint byte or Ja3 it is recommended to use Fingerprint byte
-	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloCustom") // The Client
+	bot.HttpRequest.Request.Client = *gotools.GetHelloClient("HelloCustom") // The Client
 	bot.HttpRequest.Request.InsecureSkipVerify = true // Turn on debugging mode.
 	bot.HttpRequest.Request.Headers = map[string]string{        // Used to add headers to the request.
 		"Content-Type": "application/json",
@@ -195,7 +195,7 @@ func main() {
 	bot.HttpRequest.Request.Protocol = "2"                                           // Used to set the protocol version of the request.
 	bot.HttpRequest.Request.ReadResponse = true                                      // Used to read the response from the server.
 	bot.HttpRequest.Request.ClientSpec = "<YourFingerprintbyteOrJa3>" // Your Fingerprint byte or Ja3 it is recommended to use Fingerprint byte
-	bot.HttpRequest.Request.Client = gotools.GetHelloClient("HelloCustom") // The Client
+	bot.HttpRequest.Request.Client = *gotools.GetHelloClient("HelloCustom") // The Client
 	gorequest.HttpRequest(&bot)                                                      // A function that is used to send a request to the server.
 	for k, v := range bot.HttpRequest.Request.Headers { // Printing the Headers from the server.
 		println(k, ":	", v)
@@ -295,7 +295,7 @@ func main() {
 }
 ```
 
-### HTTP Request using gorequest with Frame and Priority ordering and customization
+### HTTP Request using gorequest with Frame and Priority ordering
 
 ```go
 package main
